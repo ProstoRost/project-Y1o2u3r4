@@ -84,9 +84,12 @@ class AddressBook(UserDict):
         contact: Contact = Contact(name)
         if phone:
             contact.change_phone(phone)
-        contact.birthday = birthday
-        contact.email = email
-        contact.address = address
+        if birthday:
+            contact.birthday = birthday
+        if email:
+            contact.email = email
+        if address:
+            contact.address = address
         n: str = str.lower(name).strip()
         self.data[n] = contact
         self._ischanged = True

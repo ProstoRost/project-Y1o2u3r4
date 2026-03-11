@@ -1,22 +1,15 @@
-'''Основий модуль для роботи з контактами'''
-'''ToDO:
-- додайте функцію для збереження контактів у файл формату JSON
-- додайте функцію для завантаження контактів з файлу
-- додайте функцію для експорту контактів у форматі vCard        '''
-
 from collections import UserDict
 from src.ContactHelper.models.contact import Contact
-from utils import validate_phone_number, validate_email
 
 
 class AddressBook(UserDict):
     '''Клас для роботи з контактами'''
     def __init__(self):
         super().__init__()
-    
+
     def __str__(self) -> str:
         return f'AddressBook with {len(self.data)} contacts'
-    
+
     def add_contact(self, contact: Contact) -> bool:
         '''Додає контакт до адресної книги
         Args:
@@ -32,7 +25,8 @@ class AddressBook(UserDict):
         Args:
             name (str): ім'я контакту для пошуку
         Returns:
-            Contact: контакт з вказаним ім'ям або None, якщо контакт не знайдено'''
+            Contact: контакт з вказаним ім'ям або
+            None, якщо контакт не знайдено'''
         pass
 
     def delete_contact(self, name: str) -> bool:
@@ -40,7 +34,8 @@ class AddressBook(UserDict):
         Args:
             name (str): ім'я контакту для видалення
         Returns:
-            bool: True, якщо контакт видалено, False в іншому випадку'''
+            bool: True, якщо контакт видалено,
+            False в іншому випадку'''
         pass
 
     def setbirthday(self, name: str, date: str) -> bool:

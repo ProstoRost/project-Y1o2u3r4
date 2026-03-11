@@ -31,8 +31,6 @@ def validate_phone_number(phone_number: str) -> str:
     if not phone_number[1:].isdigit():
         raise ValueError("Phone number must be in format +380XXXXXXXXX")
 
-    return phone_number
-
 
 def validate_email(email: str) -> str:
     """Повертає електронну пошту, якщо її можна вважати валідною або

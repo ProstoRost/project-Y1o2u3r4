@@ -1,5 +1,9 @@
 from collections import UserDict
 from src.ContactHelper.models.contact import Contact
+import logging
+
+
+logger = logging.getLogger("ContactHelper")
 
 
 class AddressBook(UserDict):
@@ -32,6 +36,7 @@ class AddressBook(UserDict):
         Args:
             filename (str): ім'я файлу для збереження даних
         '''
+        logger.info(f"Successfully saved data to {filename}")
         pass
 
     @classmethod
@@ -45,6 +50,7 @@ class AddressBook(UserDict):
             ValueError якщо файл не вказаний або
             не знайдено або виникли проблеми з читанням файлу
         """
+        logger.info(f"Successfully loaded data from {filename}")
         pass
 
     def get_upcoming_birthdays(self, days: int = 7) -> list[Contact] | None:
@@ -93,6 +99,7 @@ class AddressBook(UserDict):
         n: str = str.lower(name).strip()
         self.data[n] = contact
         self._ischanged = True
+        logger.info(f"added contact: {name}")
         return True
 
     def get_contact(self, name: str) -> Contact | None:
@@ -116,6 +123,7 @@ class AddressBook(UserDict):
             False в іншому випадку'''
         if self.data.pop(str.lower(name).strip()):
             self._ischanged = True
+            logger.info(f"deleted contact: {name}")
             return True
         return False
 
@@ -132,10 +140,12 @@ class AddressBook(UserDict):
             bool: True, якщо дата народження встановлена,
             False в іншому випадку'''
         n: str = str.lower(name).strip()
-        record: Contact = self.find(n)
-        if not record:
+        contact: Contact = self.find(n)
+        if not contact:
             raise KeyError(f"Contact '{name}' not found.")
-        record.birthday = date
+        contact.birthday = date
+        logger.info(f"updated contact {contact.name}",
+                    f"birthday: {contact.birthday}")
         self._ischanged = True
         return True
 
@@ -156,6 +166,7 @@ class AddressBook(UserDict):
         if not contact:
             raise KeyError(f"Contact '{name}' not found.")
         contact.email = email
+        logger.info(f"updated contact {contact.name} email: {contact.email}")
         self._ischanged = True
         return True
 
@@ -174,6 +185,8 @@ class AddressBook(UserDict):
         if not contact:
             raise KeyError(f"Contact '{name}' not found.")
         contact.address = address
+        logger.info(f"updated contact {contact.name}",
+                    f"address: {contact.address}")
         self._ischanged = True
         return True
 
@@ -198,6 +211,9 @@ class AddressBook(UserDict):
             raise KeyError(f"Contact '{name}' not found.")
         if contact.change_phone(new_phone, phone):
             self._ischanged = True
+            logger.info(f"updated contact {contact.name}",
+                        f"phone:{contact.phone}",
+                        {f'replaced {phone}' if phone else 'added new'})
             return True
         return False
 
@@ -218,6 +234,7 @@ class AddressBook(UserDict):
         if not contact:
             raise KeyError(f"Contact '{name}' not found.")
         if contact.remove_phone(phone):
+            logger.info(f"deleted phone {phone} from contact {contact.name}")
             self._ischanged = True
             return True
         return False

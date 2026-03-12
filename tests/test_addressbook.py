@@ -2,13 +2,18 @@ from ContactHelper.core import AddressBook
 from ContactHelper.models.contact import Contact
 
 
+def test_logger_setup():
+    from ContactHelper.logger import setup_logger
+    logger = setup_logger()
+    assert logger.name == "ContactHelper"
+    assert logger.level == 20  # INFO level
+
 def test_add_contact():
     book: AddressBook = AddressBook()
     book.add_contact(name="John")
 
     assert "john" in book.data
     assert book.find("John").name == "John"
-
 
 def test_find_contact():
     book: AddressBook = AddressBook()
@@ -19,14 +24,12 @@ def test_find_contact():
     assert found is not None
     assert found.name == "Anna"
 
-
 def test_delete_contact():
     book: AddressBook = AddressBook()
     book.add_contact(name="Mike")
 
     assert book.delete_contact("Mike") is True
     assert "mike" not in book.data
-
 
 def test_add_phone():
     contact: Contact = Contact("Kate")
@@ -48,3 +51,16 @@ def test_incorrect_email():
         contact.email = "invalid_email"
     except ValueError as e:
         assert str(e) in ("Email must be in format user@example.com","Email must be a string")
+
+def test_set_email():
+    contact: Contact = Contact("Bob")
+    contact.email = "bob@example.com"
+    assert contact.email == "bob@example.com"   
+
+def test_add_tags():
+    contact: Contact = Contact("Charlie")
+    contact.tags.add("friend")
+    contact.tags.add("colleague")
+
+    assert "friend" in contact.tags
+    assert "colleague" in contact.tags
